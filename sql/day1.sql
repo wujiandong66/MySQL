@@ -6,6 +6,14 @@ SHOW TABLES ;
 CREATE TABLE t_student(
   sno VARCHAR(10),
   sname VARCHAR(10),
-  
+  gender CHAR(1),
   age int(2)
-)
+);
+
+  SELECT *
+  FROM t_student;
+
+  INSERT INTO t_student
+  VALUES ('2017001','张三');
+
+desc t_student;
