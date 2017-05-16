@@ -14,6 +14,6 @@ CREATE TABLE t_student(
   FROM t_student;
 
   INSERT INTO t_student
-  VALUES ('2017001','张三');
+  VALUES ('2017001','张三','男',18);
 
-desc t_student;
+desc t_student
