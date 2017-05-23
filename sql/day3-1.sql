@@ -33,8 +33,8 @@ CREATE TABLE db_1702.student_course (
   score     INT COMMENT '考试成绩'
   -- CONSTRAINT fk_sutdent_course_studentId FOREIGN KEY (studentId) REFERENCES db_1702.student (id)
 );
-
 -- alter 改变\ ['ɔːltə\;\ 'ɒl-]    DDL
+
 ALTER TABLE db_1702.student_course
   ADD CONSTRAINT
   fk_student_course_studentId
@@ -81,82 +81,3 @@ SELECT *
 FROM db_1702.student;
 
 DELETE FROM db_1702.student;
-
-# DDL Data Definition Language
-# CREATE ...
-# DROP ...
-# ALTER ...
-
-# DML INSERT UPDATE DELETE
-
-DROP TABLE IF EXISTS db_1702.test;
-CREATE TABLE db_1702.test (
-  id  INT AUTO_INCREMENT PRIMARY KEY
-  COMMENT 'ID PK',
-  col VARCHAR(255) COMMENT 'test column'
-);
-
-ALTER TABLE db_1702.test_new
-  RENAME db_1702.test;
-
-SHOW TABLES;
-
-ALTER TABLE db_1702.test
-  ADD COLUMN col1 VARCHAR(255);
-
-ALTER TABLE db_1702.test
-  ADD COLUMN col2 VARCHAR(255)
-  AFTER id;
-
-ALTER TABLE db_1702.test
-  ADD COLUMN col3 VARCHAR(255)
-  FIRST;
-
-ALTER TABLE db_1702.test
-  DROP COLUMN col3;
-
-ALTER TABLE db_1702.test
-  MODIFY COLUMN col INT FIRST;
-
-ALTER TABLE db_1702.test
-  MODIFY COLUMN id INT;
-
-ALTER TABLE db_1702.test
-  DROP PRIMARY KEY;
-
-ALTER TABLE db_1702.test
-  ADD CONSTRAINT pk_test_id PRIMARY KEY (id);
-
-ALTER TABLE db_1702.test
-  MODIFY COLUMN id INT AUTO_INCREMENT;
-
-ALTER TABLE db_1702.test
-  CHANGE col colNew VARCHAR(255)
-  AFTER id;
-
-SHOW FULL COLUMNS FROM db_1702.test;
-
-SHOW FULL COLUMNS FROM db_1702.student_course;
-
-ALTER TABLE db_1702.student_course
-  DROP FOREIGN KEY fk_student_course_studentId;
-
-ALTER TABLE db_1702.student_course
-  ENABLE KEYS;
-
-ALTER TABLE db_1702.student_course
-  ADD CONSTRAINT
-  fk_student_course_studentId
-FOREIGN KEY (studentId)
-REFERENCES db_1702.student (id);
-
-
-SELECT *
-FROM db_1702.student;
-SELECT *
-FROM db_1702.course;
-
-INSERT INTO db_1702.student_course VALUES (NULL, 1, 10, NULL);
-
-SELECT *
-FROM db_1702.student_course;
