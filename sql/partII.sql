@@ -4,6 +4,7 @@ SELECT
   d.DEPTNO
 FROM scott.emp e INNER JOIN scott.dept d
     ON e.DEPTNO = d.DEPTNO;
+
 # 2. 工资多于 scott 的员工信息
 
 SELECT e1.*

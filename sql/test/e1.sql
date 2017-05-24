@@ -1,176 +1,125 @@
-/*
-一个学生选课系统的数据库 db_exam，包含以下库表：
-student 学生表
-    id
-    name
-    age
-    gender
-    dob
-    departmentId
+DROP DATABASE IF EXISTS db_sc;
+CREATE DATABASE db_sc;
 
-department 系别表
-    id
-    title 系名称
-    tel
-course 课程表
-    id
-    title 课程名称
-    credit 学分
-student_course 选课表
-    id
-    studentId
-    courseid
-    grade 考试成绩
+# 学生表
+DROP TABLE IF EXISTS db_sc.student;
+CREATE TABLE db_sc.student (
+  id           INT AUTO_INCREMENT PRIMARY KEY
+  COMMENT 'ID PK',
+  name         VARCHAR(255) COMMENT '姓名',
+  age          INT COMMENT '年龄',
+  gender       VARCHAR(255) COMMENT '性别',
+  dob          DATE COMMENT '出生日期',
+  departmentId INT COMMENT 'FK 系 ID'
+)
+  COMMENT '学生表';
 
-使用合理的数据类型、约束和规范的语句创建以上各表（40分）
-写出查询各表字段注释、各表名注释的语句 (10分)
-为存在关联的表追加合理的外键（10分）
-为各表添加 5 条样本数据（10分）
-修改选课表 grade 字段，改名为 score（10分）
-查询所有姓王的学生（10分）
-删除各表，删除数据库（10分）
+# 系别表
+DROP TABLE IF EXISTS db_sc.department;
+CREATE TABLE db_sc.department (
+  id    INT AUTO_INCREMENT PRIMARY KEY
+  COMMENT 'ID PK',
+  title VARCHAR(255) COMMENT '系名称',
+  tel   VARCHAR(255) COMMENT '电话'
+)
+  COMMENT '系别表';
 
-*/
-
-DROP DATABASE IF EXISTS db_exam ;
-CREATE DATABASE db_exam;
-DROP TABLE IF EXISTS db_exam.student;
-CREATE TABLE db_exam.student (
+# 课程表
+DROP TABLE IF EXISTS db_sc.course;
+CREATE TABLE db_sc.course (
   id     INT AUTO_INCREMENT PRIMARY KEY
   COMMENT 'ID PK',
-  name   VARCHAR(255) NOT NULL
-  COMMENT '姓名',
-  age    INT UNSIGNED COMMENT '年龄',
-  gender CHAR(2) COMMENT '性别',
-  dob    DATE COMMENT '出生日期',
-  departmentId   INT COMMENT  '系别表'
-)COMMENT '考试';
+  title  VARCHAR(255) COMMENT '课程名称',
+  credit INT COMMENT '学分'
+)
+  COMMENT '课程表';
 
-ALTER TABLE db_exam.student
+# 选课表
+DROP TABLE IF EXISTS db_sc.student_course;
+CREATE TABLE db_sc.student_course (
+  studentId INT COMMENT 'FK 学生 ID',
+  courseId  INT COMMENT 'FK 课程 ID',
+  score     INT COMMENT '考试成绩',
+  PRIMARY KEY (studentId, courseId)
+)
+  COMMENT '选课表';
+
+ALTER TABLE db_sc.student
   ADD CONSTRAINT
-  fk_student_course_departmentId
-FOREIGN KEY (id)
-REFERENCES db_exam.department (id); -- 加入系 外键约束
+  student_fk_departmentId
+FOREIGN KEY (departmentId)
+REFERENCES db_sc.department (id);
 
--- 为各表添加 5 条样本数据
-INSERT INTO db_exam.student
-VALUES (NULL ,'zhangsan',19,'m','1993-01-10',1);
-INSERT INTO db_exam.student
-VALUES (NULL ,'王二',19,'m','1993-01-21',2);
-INSERT INTO db_exam.student
-VALUES (NULL ,'lisa',19,'w','1993-01-20',3);
-INSERT INTO db_exam.student
-VALUES (NULL ,'tom',19,'m','1993-01-10',4);
-INSERT INTO db_exam.student
-VALUES (NULL ,'tony',19,'m','1993-01-10',5);
-
-SELECT *
-FROM db_exam.student;
--- 系别表
-DROP TABLE IF EXISTS db_exam.department;
-CREATE TABLE db_exam.department (
-  id     INT AUTO_INCREMENT PRIMARY KEY
-  COMMENT 'ID Pk',
-  title  VARCHAR(255) UNIQUE
-  COMMENT '系名称',
-  tel  VARCHAR(255) COMMENT '手机号'
-)COMMENT '系别表';
--- 为各表添加 5 条样本数据
-INSERT INTO db_exam.department
-VALUES (NULL ,'Front end',13504564545);
-INSERT INTO db_exam.department
-VALUES (NULL ,'ui',13504564546);
-INSERT INTO db_exam.department
-VALUES (NULL ,'java',13504564547);
-INSERT INTO db_exam.department
-VALUES (NULL ,'bigdata',13504564548);
-INSERT INTO db_exam.department
-VALUES (NULL ,'Art Department',13504564549);
-
-SELECT *
-FROM db_exam.department;
-
-
--- course 课程表
-DROP TABLE IF EXISTS db_exam.course;
-CREATE TABLE db_exam.course (
-  id     INT AUTO_INCREMENT PRIMARY KEY
-  COMMENT 'ID Pk',
-  title  VARCHAR(255) UNIQUE
-  COMMENT '课名称',
-  credit  INT COMMENT '学分'
-)COMMENT '课程表';
--- 为各表添加 5 条样本数据
-INSERT INTO db_exam.course
-VALUES (NULL ,'javascrip',3);
-INSERT INTO db_exam.course
-VALUES (NULL ,'jq',1);
-INSERT INTO db_exam.course
-VALUES (NULL ,'html',1);
-INSERT INTO db_exam.course
-VALUES (NULL ,'javase',5);
-INSERT INTO db_exam.course
-VALUES (NULL ,'mysql',4);
-
-SELECT *
-FROM db_exam.course;
-
-
-
--- 选课表
-DROP TABLE IF EXISTS db_exam.student_course;
-CREATE TABLE db_exam.student_course (
-  id     INT AUTO_INCREMENT PRIMARY KEY
-  COMMENT 'ID Pk',
-  studentId  INT UNIQUE
-  COMMENT '学生id',
-  courseid  INT COMMENT '课程名称id',
-  grade  int comment '考试成绩'
-)COMMENT '选课表';
-INSERT INTO db_exam.student_course
-VALUES (NULL ,1,1,100);
-INSERT INTO db_exam.student_course
-VALUES (NULL ,2,2,100);
-
-INSERT INTO db_exam.student_course
-VALUES (NULL ,3,4,100);
-INSERT INTO db_exam.student_course
-VALUES (NULL ,4,3,100);
-INSERT INTO db_exam.student_course
-VALUES (NULL ,5,5,100);
-
-
-SELECT *
-FROM db_exam.student_course;
-
-
-ALTER TABLE db_exam.student_course
+ALTER TABLE db_sc.student_course
   ADD CONSTRAINT
-  fk_student_course_studentId
-FOREIGN KEY (Id)
-REFERENCES db_exam.student (id);
--- 增加 student_course 外键
-ALTER TABLE db_exam.student_course
+  student_course_fk_studentId
+FOREIGN KEY (studentId)
+REFERENCES db_sc.student (id);
+
+ALTER TABLE db_sc.student_course
   ADD CONSTRAINT
-  fk_student_course_courseId
-FOREIGN KEY (courseid )
-REFERENCES db_exam.course (id);
+  student_course_fk_courseId
+FOREIGN KEY (courseId)
+REFERENCES db_sc.course (id);
 
--- 修改选课表 grade 字段，改名为 score
-ALTER TABLE db_exam.student_course
-  CHANGE grade score INT;
--- 查询所有姓王的学生（10分）
+INSERT INTO db_sc.department VALUES (NULL, 'CS', '12345678'), (NULL, 'EE', '12345678');
+INSERT INTO db_sc.student VALUES (NULL, 'name1', 20, 'M', '1999-1-1', 1), (NULL, 'name2', 20, 'M', '1999-1-1', 2);
+INSERT INTO db_sc.course VALUES (NULL, 'Java SE', 5), (NULL, 'MySQL', 4);
+INSERT INTO db_sc.student_course VALUES (1, 1, NULL), (1, 2, NULL), (2, 2, NULL);
+
+
 SELECT *
-FROM db_exam.student
-WHERE  name LIKE '王%';
+FROM db_sc.student;
+SELECT *
+FROM db_sc.department;
+SELECT *
+FROM db_sc.course;
+SELECT *
+FROM db_sc.student_course;
+
+INSERT INTO db_sc.student_course VALUES (1, 1, NULL);
+
+-- id=1的学生选了哪些课？
+SELECT
+  s.name,
+  c.title
+FROM db_sc.student s INNER JOIN db_sc.course c
+  INNER JOIN db_sc.student_course sc
+    ON s.id = sc.studentId AND c.id = sc.courseId
+WHERE s.id = 1;
+
+-- id=2的课有哪些学生选？
+SELECT
+  c.title,
+  s.name
+FROM db_sc.student s INNER JOIN db_sc.course c
+  INNER JOIN db_sc.student_course sc
+    ON s.id = sc.studentId AND c.id = sc.courseId
+WHERE c.id = 2;
+
+-- 所有学生获得的总学分？ - student course student_course
+
+/*
+  ----------
+  Tom   | 10
+  ------+---
+  Jerry |  5
+*/
 
 
+-- person
+#   name
+#   ...
 
--- 删除各表，删除数据库（10分）
-USE db_exam;
-SHOW TABLES;
+-- address
+#   loc
+#   ...
 
-DROP TABLE db_exam.student_course ;
-DROP TABLE db_exam.student ;
-DROP TABLE db_exam.department;
-DROP TABLE db_exam.course;
+# 1 person - 1 address  1 对 1
+# 1 person - n address  1 对 多
+# n person - 1 address  多 对 1
+# n person - n address  多 对 多
+
+# student - course n:n
+# student - student_course 1:n
+# course - student_course 1:n

@@ -1,0 +1,15 @@
+START TRANSACTION;
+SELECT *
+FROM scott.emp;
+DELETE FROM scott.emp;
+ROLLBACK;
+
+START TRANSACTION ;
+UPDATE scott.emp
+    SET SAL=SAL+1000
+WHERE emp.ENAME='allen';
+COMMIT ;
+ROLLBACK ;
+
+SELECT *
+FROM scott.emp;
